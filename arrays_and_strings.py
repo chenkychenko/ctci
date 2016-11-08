@@ -157,3 +157,94 @@ def palindrome_permutation(a):
 print palindrome_permutation("are we not drawn onward to new era")
 print palindrome_permutation("poop")
 print palindrome_permutation("the city")
+
+# 1.5 One Away
+# ==============================================================================================
+# There are three types of edits that can be performed on strings: insert a character, remove a
+# character or replace a character. Given two strings, write a function to check if they are one
+# edit (or zero edits) away.
+# ==============================================================================================
+def one_edit_away(a, b):
+    """
+    First, we check that the length does not differ by more than 1 - if it does, then we know that
+    the two strings are more than 1 edit away. Otherwise, we break it down into two cases:
+    insertion/deletion or replacement.
+    
+    Runtime is O(N) and space complexity is O(1) (if counting converting strings to lists then O(N))
+    """
+    a = list(a)
+    b = list(b)
+    if abs(len(a) - len(b)) > 1:
+        return False
+    if len(a) > len(b):
+        return one_edit_insert(b,a)
+    elif len(a) < len(b):
+        return one_edit_insert(a,b)
+    else:
+        return one_edit_replace(a,b)
+
+def one_edit_insert(a,b):
+    """
+    Iterate through both strings simultaneously and check when an extra character is enountered.
+    Runtime is O(N) and O(1) space.
+    """
+    i = 0
+    k = 0
+    while i < len(a) and k < len(b):
+        if a[i] != b[k]:
+            if i != k:
+                return False
+            k += 1
+        else:
+            i += 1
+            k += 1
+    return True
+
+def one_edit_replace(a,b):
+    """
+    Iterate through both strings simultaneously and note when the replacement has been found. From
+    there just make sure there are no more replacements.
+    Runtime is O(N) with O(1) space used.
+    
+    """
+    replacement_found = False
+    for i in range(len(a)): # length is the same
+        if a[i] != b[i]:
+            if replacement_found:
+                return False
+            replacement_found = True
+    return True
+
+print one_edit_away('pale', 'slepa') # two replacements, should be false
+print one_edit_away('poop', 'polp')
+print one_edit_away('diana', 'dianai')
+
+# OPTIMIZED VERSION: do all cases in one method
+def one_edit_merged(a, b):
+    a = list(a)
+    b = list(b)
+    if abs(len(a) - len(b)) > 1:
+        return False
+    
+    shorter = a if len(a) < len(b) else b
+    longer = b if len(a) < len(b) else a
+    print "shorter: {}, longer: {}".format(shorter, longer)
+    found_difference = False
+    i = 0
+    k = 0
+    while i < len(shorter) and k < len(longer):
+        print i, k
+        if shorter[i] != longer[k]:
+            if found_difference:
+                return False
+            found_difference = True
+            if len(shorter) == len(longer):
+                i += 1
+        else:
+            i += 1
+        k += 1
+    return True
+
+print one_edit_merged('pale', 'pales')
+print one_edit_merged('pale', 'pal')
+print one_edit_merged('pale', 'bake') # FALSE

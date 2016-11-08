@@ -8,7 +8,7 @@
 # What if you cannot use additional data structures?
 # ==============================================================================================
 
-def is_unique(s):
+def is_unique_counts(s):
     """
     This solution runs in O(N) time using O(1) extra space
     """
@@ -24,7 +24,7 @@ def is_unique(s):
     print char_list
     return True
 
-print is_unique("liourew")
+print is_unique_counts("liourew")
 
 def is_unique_bitvector(s):
     return False # in progress
@@ -43,6 +43,7 @@ def is_unique_set(string):
 
 # print is_unique_set("diana")
 
+# BRUTE FORCE IMPLEMENTATION
 def is_unique_brute(string):
     """
     This solution runs in O(N2) time and uses O(1) space
@@ -53,39 +54,40 @@ def is_unique_brute(string):
                 return False
     return True
 
-# print is_unique_brute("dialk")
+# print is_unique_brute("qweuijkhfs")
 
 # 1.2 Check Permutation
 # ==============================================================================================
 # Given two strings, write a method to decide if one is a permutation of the other
 # ==============================================================================================
 
-def is_permutation(a, b):
+def is_permutation_counts(a,b):
     """
-    This solution runs in O(N) time and uses O(N) extra space
+    This solution uses an array to count frequencies of each character occurring
+    Then goes through the second array decrementing
+    Runtime is O(N) using O(1) extra space (array that is 128 chars)
     """
-    chars_in_a = {}
-    chars_in_b = {}
+    if len(a) != len(b):
+        return False
+
+    letters = [0] * 128 # assumption this is ASCII
     for char in a:
-        if char in chars_in_a:
-            chars_in_a[char] += 1
-        else:
-            chars_in_a[char] = 1
+        letters[ord(char)] += 1
     for char in b:
-        if char in chars_in_b:
-            chars_in_b[char] += 1
-        else:
-            chars_in_b[char] = 1
-    return chars_in_a == chars_in_b
+        letters[ord(char)] -= 1
+        if letters[ord(char)] < 0:
+            return False
+    return True
 
-# print is_permutation("diana", "andia")
-
-# not using extra space:
-def is_permutation_2(a, b):
+# not using any extra space at all:
+def is_permutation_sort(a, b):
     """
     This solution runs in O(NlogN) time and uses O(1) space
     """
     return sorted(a) == sorted(b)
+
+# print is_permutation_count("diana", "andia")
+# print is_permutation_sort("diana", "andia")
 
 # 1.3 URLify
 # ==============================================================================================
@@ -95,6 +97,11 @@ def is_permutation_2(a, b):
 # ==============================================================================================
 
 def urlify(a, true_len):
+    """
+    This solution 'cheats' and creates a list of python characters it then joins together
+    This solution is not technically done in place. 
+    Runtime is O(N) to scan through char array, then to join list. Uses O(N) extra space
+    """
     urlified = []
     for i in range(true_len):
         if a[i] == " ":
@@ -130,52 +137,23 @@ print urlify_inplace("Mr John Smith    ", 13)
 # is a word or phrase that is the same forwards and backwards. A permutation is a rearrangement
 # of letters. The palindrome does not need to be limited to just dictionary words.
 # ==============================================================================================
-# def palindrome_permutation(a):
-    
+def palindrome_permutation(a):
+    # might need to convert upper case to lower case - go through array once and convert
+    letters = [0] * 128 # assume ASCII
+    num_spaces = 0
+    for char in a:
+        if char != " ":
+            letters[ord(char)] = not letters[ord(char)]
+        else:
+            num_spaces += 1
+    count = 0
+    for l in letters:
+        if l:
+            count += 1
+    if count <= 1:
+        return True
+    return False # any other combination
 
-
-# SORTING ALGOS
-# bubble sort
-# def bubble_sort(num_list):
-#     for i in range(len(num_list)-1,0,-1):
-#         for j in range(i):
-#             if num_list[j] > num_list[j+1]:
-#                 temp = num_list[j]
-#                 num_list[j] = num_list[j+1]
-#                 num_list[j+1] = temp
-#     print num_list
-
-# # selection sort
-# def selection_sort(num_list):
-#     for i in range(len(num_list)):
-#         min_index = i # set the min first
-#         for j in range(i+1, len(num_list)):
-#             if num_list[j] < num_list[min_index]:
-#                 min_index = j
-#         temp = num_list[i]
-#         num_list[i] = num_list[min_index]
-#         num_list[min_index] = temp
-#     print num_list
-
-    
-# # insertion sort
-# def insertion_sort(num_list):
-#     for i in range(1,len(num_list)):
-#         temp = num_list[i]
-#         k = i-1
-#         while k >= 0 and temp < num_list[k]:
-#             num_list[k+1] = num_list[k]
-#             k -= 1
-#         num_list[k+1] = temp
-#     print num_list
-
-# for i in range(10):
-#     print i
- 
-# b = [6,9,2,1,5,4,8,0]
-# print "NOW RUNNING BUBBLE SORT FOR LIST {}".format(b)
-# bubble_sort(b)
-# print "NOW RUNNING SELECTION SORT FOR LIST {}".format(b)
-# selection_sort(b)
-# print "NOW RUNNING INSERTION SORT FOR LIST {}".format(b)
-# insertion_sort(b)
+print palindrome_permutation("are we not drawn onward to new era")
+print palindrome_permutation("poop")
+print palindrome_permutation("the city")

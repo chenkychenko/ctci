@@ -248,3 +248,28 @@ def one_edit_merged(a, b):
 print one_edit_merged('pale', 'pales')
 print one_edit_merged('pale', 'pal')
 print one_edit_merged('pale', 'bake') # FALSE
+
+# 1.6 String Compression
+# ==============================================================================================
+# Implement a method to perform basic string compression using the counts of repeated characters.
+# For example, the string aabcccccaaa would become a2b1c5a3. If the "compressed" string would not
+# become smaller than the original string, your method should return the original string. You can
+# assume the string has only uppercase and lowercase letters (a-z).
+# ==============================================================================================
+def string_compression(a):
+    a = list(a)
+    compressed = []
+    count = 0
+    for i in range(len(a)):
+        count += 1
+        if i +1 >= len(a) or a[i] != a[i+1]:
+            compressed.append(a[i])
+            compressed.append(str(count))
+            count = 0
+    return "".join(compressed) if len(compressed) < len(a) else "".join(a)
+
+print string_compression("aaaabbbbcddd")
+print string_compression("accccbbggg") # a1c4b2g3
+print string_compression("abcde")
+
+

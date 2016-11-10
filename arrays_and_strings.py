@@ -272,4 +272,25 @@ print string_compression("aaaabbbbcddd")
 print string_compression("accccbbggg") # a1c4b2g3
 print string_compression("abcde")
 
+# 1.7 Rotate Matrix
+# ==============================================================================================
+# Given an image represented by an NxN matrix, where each pixel in the image is 4 bytes, write a
+# method to rotate the image by 90 degrees. Can you do this in place?
+# ==============================================================================================
+def rotate_matrix(matrix):
+    for i in range(len(matrix)/2+1):
+        for k in range(i, len(matrix)-1):
+            temp = matrix[i][k]
+            # print temp
+            matrix[i][k] = matrix[k][len(matrix)-1-i]
+            matrix[k][len(matrix)-1-i] = matrix[len(matrix)-1-i][len(matrix)-1-k]
+            matrix[len(matrix)-1-i][len(matrix)-1-k] = matrix[len(matrix)-1-k][i]
+            matrix[len(matrix)-1-k][i] = temp
+    return matrix
 
+matrix = [[1,2,3],
+          [4,5,6],
+          [7,8,9]]
+
+for i in rotate_matrix(matrix):
+    print i

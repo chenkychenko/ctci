@@ -127,4 +127,49 @@ node = my_list.head
 while node:
     print node.data
     node = node.next_node
-        
+
+# 2.4 Partition
+# ==============================================================================================
+# Write code to partition a linked list around a value x, such that all nodes less than x come
+# before all nodes greater than or equal to x. If x is container within the list, the values of 
+# x only need to be after the elements less than x. The partition element x can appear anywhere
+# in the "right partition"; it does not need to appear between the left and right partitions.
+# ==============================================================================================
+def partition(head, k):
+    if not head or not head.next_node:
+        return None # list is empty or only one element
+    
+    node = head
+    last = None
+    length = 0
+    while node:
+        length += 1
+        if not node.next_node:
+            last = node
+        node = node.next_node
+    
+    node = head
+    prev = None
+    count = 0
+    while count < length:
+        count += 1
+        if node.data < k:
+            prev = node
+            node = node.next_node
+        else: # need to move node to the end
+            next_node = node.next_node
+            if not prev:
+                head = next_node
+            else:
+                prev.next_node = next_node        
+            last.next_node = node
+            last = node
+            last.next_node = None    
+            node = next_node
+    return head
+
+my_list = LinkedList([5,4,8,2,3,1,7])
+node = partition(my_list.head, 3)
+while node:
+    print node.data
+    node = node.next_node

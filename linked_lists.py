@@ -173,3 +173,19 @@ node = partition(my_list.head, 3)
 while node:
     print node.data
     node = node.next_node
+
+def partition(node, k):
+    head = node
+    tail = node
+    
+    while node:
+        next_node = node.next_node
+        if node.data < k:
+            node.next_node = head
+            head = node
+        else:
+            tail.next_node = node
+            tail = node
+        node = next_node
+    tail.next_node = None
+    return head

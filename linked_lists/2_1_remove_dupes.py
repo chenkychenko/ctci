@@ -21,3 +21,24 @@ node = ml.head
 while node:
 	print node.data
 	node = node.next_node
+
+def remove_dupes_no_buffer(head):
+    cur = head
+    while cur:
+        prev = cur
+        runner = cur.next_node
+        while runner:
+            if runner.data == cur.data:
+                prev.next_node = runner.next_node
+            else:
+                prev = runner
+            runner = runner.next_node
+        cur = cur.next_node
+    return head
+
+my_list = LinkedList([1,2,2,3,3,4,5,5,2,2])
+res = remove_dupes_no_buffer(my_list.head)
+node = res
+while node:
+    print node.data
+    node = node.next_node 

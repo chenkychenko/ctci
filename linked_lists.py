@@ -26,30 +26,20 @@ class LinkedList(object):
 # Write code to remove duplicates from an unsorted linked list.
 # Followup: how would you solve this problem if a temporary bugger is not allowed?
 # ==============================================================================================
-def remove_dupes(head):
-    if not head:
-        raise Exception("Head pointer is null")
-    dupe_counts = {}
-    cur_node = head
-    while cur_node:
-        if cur_node.data not in dupe_counts:
-            dupe_counts[cur_node.data] = 1
+def remove_dupes(node):
+    dupes = set()
+    prev = None
+    while node:
+        if node.data in dupes:
+            prev.next_node = node.next_node
         else:
-            dupe_counts[cur_node.data] += 1
-        cur_node = cur_node.next_node
-    cur_node = head
-    while cur_node.next_node:
-        if dupe_counts[cur_node.next_node.data] > 1: # duplicate
-            dupe_counts[cur_node.next_node.data] -= 1
-            cur_node.next_node = cur_node.next_node.next_node
-        cur_node = cur_node.next_node
-    return head
+            dupes.add(node.data)
+            prev = node
+        node = node.next_node
 
-my_list = [1,2,3,4,4,5,6,3,3]
-my_list = LinkedList(my_list)
-
-node = remove_dupes(my_list.head)
-
+ml = LinkedList([1,1,1,2,2,3,6,5,4,5,2,3,8,7,6,5,4,3,9])
+remove_dupes(ml.head)
+node = ml.head
 while node:
     print node.data
     node = node.next_node
@@ -189,3 +179,37 @@ def partition(node, k):
         node = next_node
     tail.next_node = None
     return head
+
+# 2.4 Sum Lists
+# ==============================================================================================
+# You have two numbers represented by a linked list, where each node contains a single digit.
+# The digits are stored in reverse order, such that the 1s digit is at the head of the list. 
+# Write a function that adds the two numbers and returns the sum as a linked list.
+# ==============================================================================================
+def sum_lists(l1, l2, carry):
+    if not l1 and not l2 and carry == 0:
+        return None
+
+    result = Node(None)
+    value = carry
+    if l1:
+        value += l1.data
+    if l2:
+        value += l2.data
+
+    result.data = value % 10 # get second digit
+    if l1 and l2:
+        l1 = l1.next_node if l1 else None
+        l2 = l2.next_node if l2 else None
+        value = 1 if value >= 10 else 0
+        more = sum_lists(l1, l2, value)
+        result.next_node = more
+    return result
+
+a = LinkedList([5,4,8])
+b = LinkedList([1,2,4])
+res = sum_lists(a.head, b.head, 0)
+
+while res:
+    print res.data
+    res = res.next_node

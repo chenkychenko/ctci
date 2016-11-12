@@ -213,3 +213,10 @@ res = sum_lists(a.head, b.head, 0)
 while res:
     print res.data
     res = res.next_node
+
+def sum_lists(list_1, list_2):
+    a = int(''.join([str(x) for x in list_1][::-1]))
+    b = int(''.join([str(x) for x in list_2][::-1]))
+    result = a + b
+    return list(str(result))[::-1]
+

@@ -1,2 +1,2 @@
 # ctci
-Problems from Cracking the Coding Interview 6th Edition book, solved in Python
+Algorithms problems, grouped by topic solved in python

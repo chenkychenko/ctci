@@ -6,20 +6,6 @@
 # assume the string has only uppercase and lowercase letters (a-z).
 # ==============================================================================================
 def string_compression(s):
-	compressed = []
-	count = 1
-	cur = s[0]
-	for i in range(len(s)):
-		if s[i] == cur:
-			count += 1
-		compressed.append(cur + str(count))
-		cur = s[i]
-	r = ''.join(compressed) if len(compressed) < len(s) else ''.join(s)
-	return r
-
-print string_compression("aaaabbbcccdd")
-
-def string_compression(s):
     compressed = []
     count = 0
     for i in range(len(s)):

@@ -16,19 +16,27 @@ def kth_to_last(head, k):
     return node
 
 print kth_to_last(LinkedList([7,6,5,4,3,2,1]).head, 2).data
-print kth_to_last(LinkedList([7,6,5,4,3,2,1]).head, 10).data
+# print kth_to_last(LinkedList([7,6,5,4,3,2,1]).head, 10).data
 
-# class WrapperNode(object):
-# 	index = 0
-# 	node = None
-
-def kth_to_last_rec(node, k):
+def kth_to_last_print(node, k):
     if not node:
         return 0
-    index = kth_to_last_rec(node.next_node, k) + 1
+    index = kth_to_last_print(node.next_node, k) + 1
     if index == k:
         print "Kth to last node is: {}".format(node.data)
     return index
 
-kth_to_last_rec(LinkedList([7,6,5,4,3,2,1]).head, 5)
+kth_to_last_print(LinkedList([7,6,5,4,3,2,1]).head, 5)
+
+def kth_to_last_rec(node, k):
+    if not node:
+        return (node, 0)
+    next_node, index = kth_to_last_rec(node.next_node, k)
+    index += 1
+    if index == k:
+        return (node, index)
+    return (next_node, index)
+
+n, idx = kth_to_last_rec(LinkedList([7,6,5,4,3,2,1]).head, 5)
+print n.data
 

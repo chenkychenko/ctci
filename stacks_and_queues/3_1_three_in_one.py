@@ -24,6 +24,7 @@ class MultiStack(object):
         self.sizes[num_stack] += 1 # increment size
         offset = num_stack * self.capacity + self.sizes[num_stack] - 1
         self.stacks[offset] = item
+        print self.stacks
         
     def peek(self, num_stack):
         offset = num_stack * self.capacity + self.sizes[num_stack] - 1
@@ -35,9 +36,12 @@ class MultiStack(object):
     def is_full(self, num_stack):
         return self.sizes[num_stack] == self.capacity
     
-mstack = MultiStack(5, 3)
-mstack.push(1, 5)
-print mstack.stacks
-print mstack.sizes
+mstack = MultiStack(5,3)
+mstack.push(1,5)
 mstack.pop(1)
-print mstack.stacks
+mstack.push(2,6)
+mstack.push(2,8)
+mstack.push(2,1)
+mstack.push(2,2)
+mstack.push(2,3)
+mstack.push(2,4) # SHOULD BE FULL

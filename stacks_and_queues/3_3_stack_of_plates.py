@@ -77,17 +77,43 @@ class SetOfStacks(object):
         if stack_to_use.is_empty():
             self.stacks.pop()
         return item
+    
+    def pop_at(self, index):
+        stack_to_use = self.stacks[index]
+        item = stack_to_use.pop()
+        self.shift_elements(index)
             
     def get_last_stack(self):
         return self.stacks[-1]
     
+    def shift_elements(self, index):
+        # a pop was performed on the stack at this index
+        for i in range(index+1, len(self.stacks)):
+            item = self.stacks[i].pop()
+            node = StackNode(item)
+            self.append_to_bottom(self.stacks[i-1], node)
+            
+    def append_to_bottom(self, stack, node):
+        bottom = stack.top
+        while bottom.next_node:
+            bottom = bottom.next_node
+        bottom.next_node = node
 
-my_stack = SetOfStacks(2)
+my_stack = SetOfStacks(3)
+my_stack.push(1)
+my_stack.push(1)
+my_stack.push(1)
+my_stack.push(2)
+my_stack.push(2)
 my_stack.push(2)
 my_stack.push(3)
-my_stack.push(6)
-for stack in my_stack.stacks:
-    stack.print_stack()    
-my_stack.pop()
-for stack in my_stack.stacks:
-    stack.print_stack()
+my_stack.push(3)
+my_stack.push(3)
+
+for i in my_stack.stacks:
+    i.print_stack()
+
+my_stack.pop_at(0)
+
+for i in my_stack.stacks:
+    i.print_stack()

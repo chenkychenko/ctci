@@ -57,41 +57,8 @@ print stack.get_min()
 # How would you design a stack which, in addition to push and pop has a function min which
 # returns the minimum element? Push, pop, and min should all operate in O(1) time.
 # ==============================================================================================
-class StackNode(object):
-    def __init__(self, data):
-        self.data = data
-        self.next_node = None
-        
-class Stack(object):
-    def __init__(self):
-        self.top = None
-        
-    def pop(self):
-        if not self.top:
-            raise Exception("Stack is empty!")
-        item = self.top.data
-        self.top = self.top.next_node
-        return item
-        
-    def push(self, item):
-        node = StackNode(item)
-        node.next_node = self.top
-        self.top = node
-    
-    def peek(self):
-        if not self.top:
-            raise Exception("Stack is empty!")
-        return self.top.data
-    
-    def is_empty(self):
-        return self.top == None
-    
-    def print_stack(self):
-        node = self.top
-        while node:
-            print node.data
-            node = node.next_node
-    
+from stack import StackNode, Stack
+
 class StackWithMin(object):
     
     def __init__(self, top=None):

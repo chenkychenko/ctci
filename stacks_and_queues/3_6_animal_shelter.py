@@ -1,4 +1,4 @@
-# 3.6 Animal Shelter
+# 3.5 Animal Shelter
 # ==============================================================================================
 # An animal shelter, which holds only dogs and cats, operates on a strickly "first in, first out"
 # basis. People must adopt either the "oldest" (based on arrival time) of all animals at the
@@ -58,15 +58,19 @@ print queue.remove()
 queue.print_queue()
 
 class Animal(object):
-    def __init__(self, kind):
-        self.kind = kind
+    def __init__(self, name):
+        self.name = name
     
     def set_order(self, order):
         self.order = order
         
 class Dog(Animal):
-    def __init__(self):
+    def __init__(self, name):
+        Animal.__init__(self, name)
         
+class Cat(Animal):
+    def __init__(self, name):
+        Animal.__init__(self, name)
         
 class AnimalQueue(object):
     def __init__(self):
@@ -101,4 +105,3 @@ class AnimalQueue(object):
         if self.cats.is_empty():
             raise Exception("Dog queue empty!")
         return self.cats.remove()
-    

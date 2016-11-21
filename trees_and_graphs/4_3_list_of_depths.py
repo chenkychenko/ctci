@@ -22,6 +22,9 @@ def print_tree(node):
             queue.append(cur_node.right)
             
 def list_of_depths(root):
+    """
+    Using modified BFS here
+    """
     depths = [[]]
     queue = deque([])
     queue.append((root, 0))
@@ -50,3 +53,24 @@ print "GETTING LIST OF DEPTHS!"
 depth_list = list_of_depths(root)
 for depth in depth_list:
     print [node.data for node in depth]
+
+def create_level_list(node, depths_list, level):
+    """
+    Recursive approach: using DFS
+    """
+    if not node:
+        return
+    if len(depths_list) == level: # need to append
+        level_list = []
+        depths_list.append(level_list)
+    else:
+        level_list = depths_list[level]
+    
+    level_list.append(node.data)
+    create_level_list(node.left, depths_list, level+1)
+    create_level_list(node.right, depths_list, level+1)
+    
+def level_list_helper(root):
+    depths_list = []
+    create_level_list(root, depths_list, 0)
+    return depths_list

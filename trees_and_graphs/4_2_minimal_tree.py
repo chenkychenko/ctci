@@ -3,7 +3,6 @@
 # Given a sorted (increasing order) array with unique integer elements, write an algorithm to
 # create a binary search tree with minimal height
 # ==============================================================================================
-
 class Node(object):
     def __init__(self, data):
         self.data = data
@@ -21,22 +20,20 @@ def print_tree(node):
             queue.append(cur_node.left)
         if cur_node.right:
             queue.append(cur_node.right)
- 
+
 def minimal_tree(start, end, array):
-    if end == start: # base case
+    if end < start: # base case
         return None
     print "start: {}, end: {}".format(start, end)
-    midpoint = start + (end - start)/2
+    midpoint = (start + end)/2
     node = Node(array[midpoint])
-    if (end - start) == 1:
-        return Node(array[start])
-    node.left = minimal_tree(start, midpoint, array)
+    node.left = minimal_tree(start, midpoint-1, array)
     node.right = minimal_tree(midpoint+1, end, array)
     return node
 
 def create_binary_tree(array):
-    return minimal_tree(0, len(array), array)
+    return minimal_tree(0, len(array)-1, array)
 
-array = [1,2,3,4,5,6,7,8,9,10,11,12,13,14]
+array = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 root = create_binary_tree(array)
 print_tree(root)

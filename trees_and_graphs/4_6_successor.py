@@ -1,8 +1,3 @@
-# 4.6 Successor
-# ==============================================================================================
-# Write an algorithm to find the "next" node (ie, in-order successor of a given node in a binary
-# search tree. You may assume that each node has a link to its parent.
-# ==============================================================================================
 class Node(object):
     def __init__(self, data):
         self.data = data
@@ -23,19 +18,21 @@ def print_tree(node):
         if cur_node.right:
             queue.append(cur_node.right)
 
-def find_successor(node):
+# 4.6 Successor
+# ==============================================================================================
+# Write an algorithm to find the "next" node (ie, in-order successor) of a given node in a binary
+# search tree. You may assume that each node has a link to its parent.
+# ==============================================================================================
+def get_successor(node):
     if not node:
         return None
     if node.right:
         return get_leftmost_node(node.right)
-    else:
-        cur_node = node
-        parent = node.parent
-        while cur_node and parent.left != cur_node: # while cur node is right child
-            cur_node = parent
-            parent = cur_node.parent
-        return parent
-    
+    # now, there is no right subtree, next is in parent if child is left
+    while node.parent and node.parent.left is not node: # while node is not left child, recurse up
+        node = node.parent
+    return node.parent
+
 def get_leftmost_node(node):
     if not node:
         return None
@@ -53,4 +50,8 @@ root.left.left.parent = root.left
 root.left.right = Node(4)
 root.left.right.parent = root.left
 
-print find_successor(root.left.left).data
+next_node = get_successor(root.left.right)
+if next_node:
+    print next_node.data
+else:
+    print "NO SUCESSOR"

@@ -23,24 +23,37 @@ def print_tree(node):
             queue.append(cur_node.right)
             
 def check_balanced(node):
+    """
+    Most optimal solution: calculate height as we go, and as soon as we encounter
+    imbalance, return False up the stack.
+    """
     if not node:
-        return (0, True) # height here is 0
-    height_left, left_bal = check_balanced(node.left)
-    height_right, right_bal = check_balanced(node.right)
-    print "left height: {}, balanced? {}".format(height_left, left_bal)
-    print "right height: {}, balanced? {}".format(height_right, right_bal)
-    if not left_bal or not right_bal:
-        return (max(height_left, height_right), False)
-    if abs(height_left - height_right) > 1:
-        return (max(height_left, height_right), False)
-    return (max(height_left, height_right) + 1, True)
+        return (0, True) # balanced and height is 0
+    left_height, left_balanced = check_balanced(node.left)
+    right_height, right_balanced = check_balanced(node.right)
+    height_diff = abs(left_height - right_height)
+    new_height = max(left_height, right_height) + 1 # including node
+    if left_balanced and right_balanced and height_diff <= 1:
+        return (new_height, True)
+    return (new_height, False)
+
+def check_balanced_helper(root):
+    _, balanced = check_balanced(root)
+    return balanced
 
 def get_height(node):
+    """
+    Extra recursive function just to find the height
+    """
     if not node:
         return -1
-    return abs(get_height(node.left), get_height(node.right)) + 1
+    return max(get_height(node.left), get_height(node.right)) + 1
 
 def is_balanced(node):
+    """
+    Less optimal solution where you have another recursive call to get the
+    height of all the subtrees
+    """
     if not node:
         return False
     height_diff = abs(get_height(node.left) - get_height(node.right))
@@ -57,5 +70,5 @@ root.right.left = Node(2)
 root.right.right = Node(7)
 
 
-print check_balanced(root)
+print check_balanced_helper(root)
             

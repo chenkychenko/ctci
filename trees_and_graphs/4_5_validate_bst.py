@@ -21,27 +21,58 @@ def print_tree(node):
         if cur_node.right:
             queue.append(cur_node.right)
 
-def check_bst(node, min_val, max_val):
+last_visited = None
+def validate_in_order(node):
     """
-    In order traversal will make sure that binary tree is BST if each element is greater than
-    previous.
+    **In order traversal does not work if there are duplicates** If there are no duplicates
+    we can use this function.
+    """
+    global last_visited
+    if not node:
+        return True
+    if not validate_in_order(node.left):
+        return False
+    if last_visited and last_visited > node.data:
+        return False
+    last_visited = node.data
+    if not validate_in_order(node.right):
+        return False
+    return True       
+        
+def validate_bst(node, min_val, max_val):
+    """
+    This solution uses ranges of values to check that all nodes in left subtree are smaller
+    than or equal to node.data, and all nodes in right subtree are greater than node. This is
+    the ideal solution and works with duplicates also.
     """
     if not node:
         return True
-    new_val = node.data
-    left_in_range = check_bst(node.left, min_val, new_val)
-    right_in_range = check_bst(node.right, new_val, max_val)
-    self_is_bst = True
-    if node.left:
-        self_is_bst = self_is_bst and (node.left.data <= new_val)
-    if node.right:
-        self_is_bst = self_is_bst and (node.right.data > new_val)
-    return left_in_range and right_in_range and self_is_bst
-    
-def bst_helper(root):
-    return check_bst(root, -sys.maxint, sys.maxint)
+    self_is_bst = (node.data >= min_val) and (node.data < max_val)
+    left_is_bst = validate_bst(node.left, min_val, node.data)
+    right_is_bst = validate_bst(node.right, node.data, max_val)
+    if self_is_bst and left_is_bst and right_is_bst:
+        return True
+    return False
+
+def validate_helper(root):
+    return validate_bst(root, -sys.maxint, sys.maxint)
+
+root = Node(5)
+root.left = Node(3)
+root.right = Node(8)
+root.left.left = Node(0)
+root.left.right = Node(4)
+root.right.left = Node(6)
+root.right.right = Node(12)
+
+print validate_helper(root)
+print validate_in_order(root)
 
 def easy_bst_check(node, in_order_list):
+    """
+    Not the most optimal but straight forward: do DFS and insert nodes into list.
+    Then check if the list is sorted. This does NOT handle duplicates.
+    """
     if not node:
         return
     easy_bst_check(node.left, in_order_list)
@@ -53,14 +84,6 @@ def easy_bst_helper(root):
     easy_bst_check(root, in_order_list)
     print [i.data for i in in_order_list]
     return all(x.data < y.data for x, y in zip(in_order_list, in_order_list[1:]))
-               
-root = Node(5)
-root.left = Node(3)
-root.right = Node(8)
-root.left.left = Node(0)
-root.left.right = Node(4)
-root.right.left = Node(6)
-root.right.right = Node(12)
 
-print easy_bst_helper(root)
-print bst_helper(root)
+# print validate_in_order(root)
+# print validate_bst(root)

@@ -2,69 +2,55 @@
 # ==============================================================================================
 # Write a method to compute all permutations for a string of unique chatacters.
 # ==============================================================================================
-def get_permutations(word, perms=None):
-    if not word or len(word) == 1:
-        return word # we are done
-    if not perms:
-        first_letter = word.pop()
-        perms = [[first_letter]]
-    letter = word.pop()
-    new_perms = []
-    for p in perms:
-        solutions = insert_in_every_position(letter, p)
-        new_perms.extend(solutions)
-    return get_permutations(word, new_perms)
-
-def insert_in_every_position(letter, permutation):
-    solutions = []
-    for i in range(len(permutation)+1):
-        print "inserting {} into index {}".format(letter, i)
-        modified_word = permutation[:]
-        modified_word.insert(i, letter)
-        solutions.append(modified_word)
-    print "SOLUTIONS: {}".format(solutions)
-    return solutions
-
-print "\n\n~~~~~~PERMUTATIONS~~~~~\n\n"
-result = get_permutations(list("a"))
-print result
-print "length: {}".format(len(result))
-
-def get_perms(remainder):
-    print "REMAINDER: {}".format(remainder)
-    result = []
-    if len(remainder) == 0:
-        result.append("")
-        print "BASE CASE RESULT: {}".format(result)
-        return result # we are done, base case!
-    for i in range(len(remainder)):
-        without_i = remainder[:]
-        without_i.pop(i)
-        partials = get_perms(without_i)
-        print "PARTIALS: {}".format(partials)
-        for s in partials:
-            result.append(remainder[i] + s)
-    # print "RESULT: {}".format(result)
-    return result
-
-print "\n\n\n permutations the other way:\n\n\n"
-res = get_perms(list('abc'))
-print res
-
-def get_perms2(prefix, remainder, result):
-    if not remainder: # base case
-        result.append(prefix)
-    else:
-        for i in range(len(remainder)):
-            before = remainder[:i]
-            after = remainder[i+1:]
-            letter = remainder[i]
-            get_perms2(prefix + letter, before + after, result)
-
-def perms_helper2(word):
+def permute(word):
+    """
+    Creates permutations by starting with empty string, then inserting char into all previous
+    results, in every index of previous permutation.
+    :param word: string, word to permute
+    :return: list of permutations (as list of chars)
+    """
     results = []
-    get_perms2('', list(word), results)
+    if not word: # no more characters left
+        results.append([''])
+        return results # base case
+    char = word.pop()
+    words = permute(word)
+    for perm in words:
+        new_perms = insert_in_every_location(perm, char)
+        results.extend(new_perms)
     return results
 
-res = perms_helper2('abc')
-print res
+def insert_in_every_location(perm, char):
+    result = []
+    for i in range(len(perm)):
+        new_perm = perm[:]
+        new_perm.insert(i, char)
+        result.append(new_perm)
+    return result
+
+res = permute(list('abcd'))
+print [''.join(i) for i in res]
+
+def get_perms(prefix, remainder, result):
+    """
+    This method computes permutations by "trying" each character as a first character in the
+    permutation.
+    :param prefix: the set string prefix for the permutation that is being built
+    :param remainder: remaining chars to use in permutation generation
+    :param result: list of strings which are permutations, this gets filled as we go
+    :return: void method, just fills up the list that gets passed in (we pass in empty list at
+    the beginning.
+    """
+    if not remainder:
+        result.append(prefix) # we have a permutation
+    for i in range(len(remainder)):
+        new_rem = remainder[:]
+        char = new_rem.pop(i)
+        get_perms(prefix + char, new_rem, result)
+
+def get_perms_helper(word):
+    result = []
+    get_perms('', list(word), result)
+    return result
+
+print get_perms_helper('abcd')

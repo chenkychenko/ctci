@@ -2,42 +2,27 @@
 # ==============================================================================================
 # Write a method to return all subsets of a set.
 # ==============================================================================================
-def get_subsets_helper(my_set):
-    subsets = []
-    get_subsets(my_set, 1, subsets)
-    return subsets
+def get_sets(my_set):
+    """
+    Generate all the sets by starting with the empty set, then inserting each character into the
+    (n-1) generated sets.
+    :param my_set: list of items - this is the set
+    :return: list of lists containing all the subsets
+    """
+    if not my_set: # empty set, base case
+        return [[]]
+    next = my_set.pop()
+    new_sets = []
+    cur_set_list = get_sets(my_set)
+    for cur_set in cur_set_list:
+        new = cur_set[:]
+        new.append(next)
+        new_sets.append(new)
+    cur_set_list.extend(new_sets)
+    return cur_set_list
 
-def get_subsets(my_set, index):
-    all_subsets = []
-    if len(my_set) == index:
-        all_subsets.append([]) # empty set
-    else:
-        all_subsets = get_subsets(my_set, index+1)
-        item = my_set[index]
-        more_subsets = []
-        for subset in all_subsets:
-            more_subsets.append(subset[:].append(item))
-    all_subsets.append()
-        
-def get_subsets(my_set):
-    result_sets = [[]]
-    for item in my_set:
-        item_sets = []
-        for result_set in result_sets:
-            item_set.append(result_set[:].append(item))
-        result_sets.extend(item_sets)
+def calculate_sets(my_set):
+    return get_sets(my_set)
 
-def get_subsets(my_set):
-    return get_subsets_helper(my_set)
-    
-def get_subsets_helper(my_set, result_sets=None):
-    if not result_sets:
-        result_sets = [[]]
-    if not my_set:
-        return result_sets
-    item = my_set.leftpop()
-    item_sets = []
-    for result_set in result_sets:
-        item_sets.append(result_set[:].append(item))
-    result_sets.extend(item_sets)
-    return get_subsets_helper(my_set, result_sets)
+res = calculate_sets([1,2,3,4])
+print res

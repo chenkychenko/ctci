@@ -3,49 +3,27 @@
 # Implement an algorithm to print all valid (ie, properly opened and closed) combinations of n
 # pairs of parentheses.
 # ==============================================================================================
-def parens(num_pairs):
-    if num_pairs == 0:
-        results = []
-        results.append([''])
-        return results
-    results = parens(num_pairs - 1)
-    # print "Results: {}".format(results)
-    more = []
-    for i in results:
-        new_res = insert_into_gaps(i)
-        more += new_res
-    more.append(get_base_combo(num_pairs))
-    return more
+def add_parens(left_rem, right_rem, chars, results):
+    if left_rem < 0 or right_rem < left_rem:
+        return  # invalid state
+    if left_rem == 0 and right_rem == 0:
+        results.append(''.join(chars))
+    else:
+        chars.append('(')
+        add_parens(left_rem - 1, right_rem, chars, results)
+        chars.pop()
+
+        chars.append(')')
+        add_parens(left_rem, right_rem - 1, chars, results)
+        chars.pop()
 
 
-def insert_into_gaps(combo):
+def generate_parens(count):
+    chars = []
     results = []
-    for i, val in enumerate(combo):
-        if val == '(':  # open paren, insert
-            new_val = combo[:]
-            new_val.insert(i + 1, '(')
-            new_val.insert(i + 2, ')')
-            results.append(new_val)
+    add_parens(count, count, chars, results)
     return results
 
 
-def get_base_combo(num):
-    res = []
-    for i in range(num):
-        res.append('(')
-        res.append(')')
-    return res
-
-
-print "\n\n\nPARENS:"
-paren = ['(', ')', '(', ')']
-res = insert_into_gaps(paren)
+res = generate_parens(4)
 print res
-
-print get_base_combo(5)
-
-print "\n\n\nRESULTS!"
-
-results = parens(3)
-for res in results:
-    print ''.join(res)
